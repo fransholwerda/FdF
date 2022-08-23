@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 15:30:36 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/17 16:13:47 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/08/23 12:15:46 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,18 @@
 #  define HEIGHT 720
 # endif
 
-typedef struct s_coord
+typedef struct s_point
 {
 	float			height;
 	unsigned int	color;
-	struct s_coord	*next;
-}					t_coord;
+	struct s_point	*next;
+}					t_point;
+
+typedef struct s_coord
+{
+	int	x;
+	int	y;
+}				t_coord;
 
 typedef struct s_map
 {
@@ -41,7 +47,7 @@ typedef struct s_map
 	float	y_spacing;
 	int		cols;
 	int		rows;
-	t_coord	*coord;
+	t_point	*point;
 }			t_map;
 
 typedef struct s_fdf
@@ -63,6 +69,14 @@ typedef struct s_fdf
  * @returns Ptr to the fdf handle or null on failure.
  */
 t_fdf	*fdf_init(int32_t width, int32_t height, char *name);
+
+/**
+ * Tests whether the input is blank space.
+ * 
+ * @param[in] c The char being tested.
+ * @returns Returns 1 if it's blank, 0 if not.
+ */
+int		ft_isblank(char c);
 
 void	drawline(mlx_image_t *img, int x0, int y0, int x1, int y1, unsigned int rgb);
 

@@ -1,38 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utility.c                                          :+:    :+:            */
+/*   point_utility.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/04/21 15:10:04 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/23 12:12:26 by fholwerd      ########   odam.nl         */
+/*   Created: 2022/08/23 17:48:33 by fholwerd      #+#    #+#                 */
+/*   Updated: 2022/08/23 17:56:06 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <MLX42.h>
-#include "../include/fdf.h"
+#include <fdf.h>
 #include <stdlib.h>
 
-t_fdf	*fdf_init(int32_t width, int32_t height, char *name)
+t_point	*pt_new(float height, unsigned int color)
 {
-	t_fdf	*fdf;
+	t_point	*pt;
 
-	fdf = (t_fdf *)malloc(sizeof(t_fdf));
-	if (!fdf)
+	pt = malloc(sizeof(t_point));
+	if (!pt)
 		return (NULL);
-	fdf->mlx = mlx_init(width, height, name, true);
-	if (!fdf->mlx)
-		return (NULL);
-	fdf->img = mlx_new_image(fdf->mlx, width, height);
-	if (!fdf->img)
-		return (NULL);
-	return (fdf);
+	pt->height = height;
+	pt->color = color;
+	return (pt);
 }
 
-int	ft_isblank(char c)
+t_point	*pt_add_back(t_point *dst, t_point *new)
 {
-	if (c == " ")
-		return (1);
-	return (0);
+	t_point	*first;
+
+	if (!dst || !new)
+		return (NULL);
+	first = dst;
+	while (dst->next)
+		dst = dst->next;
+	dst->next = new;
+	return (first);
+}
+
+void	pt_clear(t_point *pt)
+{
+	t_point	*temp;
+
+	while (pt)
+	{
+		temp = pt;
+		pt = pt->next;
+		free(temp);
+	}
 }

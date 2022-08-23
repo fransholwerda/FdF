@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/19 12:12:15 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/17 16:14:38 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/08/23 12:17:30 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	hook(void *param)
 		img->instances[0].x += 5;
 }
 
-int32_t	main(void)
+int32_t	main(int argc, char *argv[])
 {
 	t_fdf		*fdf;
 	mlx_image_t	*img;
