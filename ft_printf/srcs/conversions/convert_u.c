@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   map_utility.c                                      :+:    :+:            */
+/*   convert_u.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/08/23 17:48:30 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/25 15:07:06 by fholwerd      ########   odam.nl         */
+/*   Created: 2022/02/09 16:13:48 by fholwerd      #+#    #+#                 */
+/*   Updated: 2022/02/15 12:57:01 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fdf.h>
-#include <stdlib.h>
-#include <err_msg.h>
+#include "../../incs/ft_printf.h"
 
-t_map	*map_new(void)
+static int	ft_putuint(u_int32_t n)
 {
-	t_map	*map;
+	int	count;
 
-	map = malloc(sizeof(t_map));
-	if (!map)
-		stop(ERR_MAP_INIT);
-	map->point = NULL;
-	map->cols = 0;
-	map->rows = 0;
-	map->x_spacing = 0;
-	map->x_start = 0;
-	map->y_spacing = 0;
-	map->y_start = 0;
-	return (map);
+	count = 0;
+	if (n >= 10)
+		count = ft_putuint(n / 10);
+	count += ft_putchar((n % 10) + '0');
+	return (count);
+}
+
+int	convert_u(va_list *arg)
+{
+	u_int32_t	n;
+
+	n = va_arg(*arg, u_int32_t);
+	return (ft_putuint(n));
 }

@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/21 15:10:04 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/23 12:12:26 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/08/25 15:17:28 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_fdf	*fdf_init(int32_t width, int32_t height, char *name)
 
 int	ft_isblank(char c)
 {
-	if (c == " ")
+	if (c == ' ')
 		return (1);
 	return (0);
 }

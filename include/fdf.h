@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 15:30:36 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/23 12:15:46 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/08/25 18:04:02 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ typedef struct s_map
 {
 	float	x_start;
 	float	y_start;
-	float	x_spacing;
-	float	y_spacing;
+	float	spacing;
 	int		cols;
 	int		rows;
 	t_point	*point;
@@ -65,7 +64,7 @@ typedef struct s_fdf
  * 
  * @param[in] width The width of the window.
  * @param[in] height The height of the window.
- * @param[in] title The title of the window.
+ * @param[in] name The title of the window.
  * @returns Ptr to the fdf handle or null on failure.
  */
 t_fdf	*fdf_init(int32_t width, int32_t height, char *name);
@@ -78,6 +77,34 @@ t_fdf	*fdf_init(int32_t width, int32_t height, char *name);
  */
 int		ft_isblank(char c);
 
+/**
+ * Will parse the given file and store information in a t_map object
+ * 
+ * @param[in] file The file provided by the user.
+ * @returns Ptr to the map handle or null on failure.
+ */
+t_map	*parse(int fd);
+
+/**
+ * Functions for adding t_point objects and clearing them
+ */
+t_point	*pt_new(float height, unsigned int color);
+t_point	*pt_add_back(t_point *dst, t_point *new);
+void	pt_clear(t_point *pt);
+
+/**
+ * Function for initializing a t_map object
+ */
+t_map	*map_new(void);
+
+/**
+ * Prints out errno error if there is one, otherwise the given string.
+ * 
+ * @param[in] s (string) The message printed on error.
+ */
+void	stop(char *s);
+
+void	draw(t_fdf *fdf, t_map *map);
 void	drawline(mlx_image_t *img, int x0, int y0, int x1, int y1, unsigned int rgb);
 
 #endif

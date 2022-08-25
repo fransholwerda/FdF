@@ -1,32 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   map_utility.c                                      :+:    :+:            */
+/*   convert_p.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/08/23 17:48:30 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/25 15:07:06 by fholwerd      ########   odam.nl         */
+/*   Created: 2022/02/09 16:13:57 by fholwerd      #+#    #+#                 */
+/*   Updated: 2022/02/09 16:48:42 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fdf.h>
-#include <stdlib.h>
-#include <err_msg.h>
+#include "../../incs/ft_printf.h"
 
-t_map	*map_new(void)
+static int	ft_putpointer(u_int64_t n)
 {
-	t_map	*map;
+	char	*hex;
+	int		count;
 
-	map = malloc(sizeof(t_map));
-	if (!map)
-		stop(ERR_MAP_INIT);
-	map->point = NULL;
-	map->cols = 0;
-	map->rows = 0;
-	map->x_spacing = 0;
-	map->x_start = 0;
-	map->y_spacing = 0;
-	map->y_start = 0;
-	return (map);
+	hex = "0123456789abcdef";
+	count = 0;
+	if (n >= 16)
+		count += ft_putpointer(n / 16);
+	count += write(1, &hex[n % 16], 1);
+	return (count);
+}
+
+int	convert_p(va_list *arg)
+{
+	u_int64_t	ptr;
+	int			count;
+
+	ptr = va_arg(*arg, u_int64_t);
+	count = write(1, "0x", 2);
+	count += ft_putpointer(ptr);
+	return (count);
 }

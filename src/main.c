@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/19 12:12:15 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/23 12:17:30 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/08/25 17:00:13 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@
 #include <unistd.h>
 #include <libft.h>
 #include <fdf.h>
+#include <err_msg.h>
+
+void	stop(char *s)
+{
+	if (errno == 0)
+		ft_putendl_fd(s, 2);
+	else
+		perror(s);
+	exit(EXIT_FAILURE);
+}
 
 void	hook(void *param)
 {
@@ -42,16 +52,29 @@ int32_t	main(int argc, char *argv[])
 {
 	t_fdf		*fdf;
 	mlx_image_t	*img;
+	t_map		*map;
+	int			fd;
 
-	fdf = fdf_init(WIDTH, HEIGHT, "FdF");
-	if (!fdf)
-		exit(EXIT_FAILURE);
-	img = fdf->img;
-	ft_memset(img->pixels, 255, img->width * img->height * sizeof(int));
-	drawline(img, 0, 0, 100, 100, 120);
-	mlx_image_to_window(fdf->mlx, fdf->img, 0, 0);
-	mlx_loop_hook(fdf->mlx, &hook, fdf);
-	mlx_loop(fdf->mlx);
-	mlx_terminate(fdf->mlx);
+	errno = 0;
+	if (argc == 2)
+	{
+		fd = open(argv[1], O_RDONLY);
+		if (fd == -1)
+			stop(ERR_FD);
+		map = parse(fd);
+		close(fd);
+		fdf = fdf_init(WIDTH, HEIGHT, "FdF");
+		if (!fdf || !map)
+			stop(ERR_INIT);
+		img = fdf->img;
+		ft_memset(img->pixels, 0, img->width * img->height * sizeof(int));
+		draw(fdf, map);
+		mlx_image_to_window(fdf->mlx, fdf->img, 0, 0);
+		mlx_loop_hook(fdf->mlx, &hook, fdf);
+		mlx_loop(fdf->mlx);
+		mlx_terminate(fdf->mlx);
+	}
+	else
+		stop(ERR_FILE);
 	return (EXIT_SUCCESS);
 }

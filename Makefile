@@ -6,15 +6,13 @@
 #    By: fholwerd <fholwerd@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/03/01 12:50:34 by fholwerd      #+#    #+#                  #
-#    Updated: 2022/08/17 16:15:02 by fholwerd      ########   odam.nl          #
+#    Updated: 2022/08/25 15:18:18 by fholwerd      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 ROOT	= $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 NAME	= fdf
-SRC		=	$(ROOT)src/main.c \
-			$(ROOT)src/utility.c \
-			$(ROOT)src/draw.c \
+SRC		=	$(wildcard $(ROOT)src/*.c) \
 			$(wildcard $(ROOT)gnl/*.c)
 B_SRC	=
 OBJ		= $(SRC:.c=.o)
@@ -22,7 +20,8 @@ B_OBJ	= $(B_SRC:.c=.o)
 INCLUDE	= -I$(ROOT)MLX42/include/MLX42 \
 			-I$(ROOT)include \
 			-I$(ROOT)libft \
-			-I$(ROOT)gnl
+			-I$(ROOT)gnl \
+			-I$(ROOT)ft_printf/incs
 FRWRK	=
 LIB		= $(ROOT)MLX42/libmlx42.a \
 			$(ROOT)libft/libft.a
@@ -47,6 +46,7 @@ $(NAME): $(OBJS)
 libs:
 	make -C $(ROOT)MLX42
 	make -C $(ROOT)libft
+	make -C $(ROOT)ft_printf
 
 bonus:
 	$(MAKE) WITH_BONUS=1 all

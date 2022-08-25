@@ -6,22 +6,26 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 16:12:16 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/23 17:49:34 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/08/25 18:04:42 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fdf.h>
 #include <err_msg.h>
 #include <get_next_line.h>
+#include <libft.h>
 
-static t_coord	*fill_coords(char *line, t_map *map)
+#include <stdio.h>
+
+static void	fill_points(char *line, t_map *map)
 {
-	int				i;
+	unsigned int	i;
 	float			height;
 	unsigned int	color;
 
-	i = -1;
-	while (++i < ft_strlen(line))
+	i = 0;
+	map->cols = 0;
+	while (i < ft_strlen(line))
 	{
 		height = ft_atoi(&line[i]);
 		while (ft_isdigit(line[i]))
@@ -29,29 +33,34 @@ static t_coord	*fill_coords(char *line, t_map *map)
 		if (line[i] == ',')
 		{
 			//FIX THIS TO ADD ACTUAL COLOUR
-			color = 0x00FF0000;
+			color = 0x00FFFFFF;
 			i += 9;
 			//FIX THIS TO ADD ACTUAL COLOUR
 		}
 		else
-			color = 0x00FF0000;
+			color = 0x00FFFFFF;
 		while (ft_isblank(line[i]))
 			i++;
+		if (!map->point)
+			map->point = pt_new(height, color);
+		else
+			pt_add_back(map->point, pt_new(height, color));
+		i++;
+		map->cols++;
 	}
-	map->cols = i;
 }
 
-static int	get_points(int fd, t_map *map)
+static void	get_points(int fd, t_map *map)
 {
 	char	*line;
-	t_coord	*new_coord;
+	t_point	*new_point;
 
 	line = NULL;
-	new_coord = NULL;
+	new_point = NULL;
 	while (get_next_line(fd, &line))
 	{
-		map->cols++;
-		new_coord = fill_coords(line, map);
+		map->rows++;
+		fill_points(line, map);
 		free(line);
 		line = NULL;
 	}
@@ -59,18 +68,21 @@ static int	get_points(int fd, t_map *map)
 		free(line);
 }
 
-int	parse(int fd, t_map	*map)
+t_map	*parse(int fd)
 {
-	if (get_points(fd, map) == 0)
-	{
-		fd = fd;
-	}
-	map->x_spacing = WIDTH / (map->cols + 2);
-	map->y_spacing = HEIGHT / (map->rows + 2);
-	if (map->x_spacing > map->y_spacing)
-		map->x_spacing = map->y_spacing;
+	t_map	*map;
+	float	x_spacing;
+	float	y_spacing;
+
+	map = map_new();
+	get_points(fd, map);
+	x_spacing = WIDTH / ((map->cols + 2) * 2);
+	y_spacing = HEIGHT / ((map->rows + 2) * 2);
+	if (x_spacing > y_spacing)
+		map->spacing = y_spacing;
 	else
-		map->y_spacing = map->x_spacing;
-	map->x_start = ((map->cols - 1) / 2 + 1) * map->x_spacing;
-	map->y_start = map->y_spacing;
+		map->spacing = x_spacing;
+	map->x_start = ((map->cols - 1) / 2 + 1) * x_spacing;
+	map->y_start = y_spacing;
+	return (map);
 }
