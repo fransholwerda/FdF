@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/21 15:10:04 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/25 15:17:28 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/08/31 15:09:34 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,21 @@ t_fdf	*fdf_init(int32_t width, int32_t height, char *name)
 	fdf->img = mlx_new_image(fdf->mlx, width, height);
 	if (!fdf->img)
 		return (NULL);
+	fdf->map = NULL;
 	return (fdf);
+}
+
+void	free_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
 }
 
 int	ft_isblank(char c)

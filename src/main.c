@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/19 12:12:15 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/25 17:00:13 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/08/31 17:48:01 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,36 +39,50 @@ void	hook(void *param)
 	if (mlx_is_key_down(mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(mlx);
 	if (mlx_is_key_down(mlx, MLX_KEY_UP) || (mlx_is_key_down(mlx, MLX_KEY_W)))
-		img->instances[0].y -= 5;
+	{
+		fdf->map->y_start -= 50;
+		draw(fdf, fdf->map);
+	}
 	if (mlx_is_key_down(mlx, MLX_KEY_DOWN) || (mlx_is_key_down(mlx, MLX_KEY_S)))
-		img->instances[0].y += 5;
+	{
+		fdf->map->y_start += 50;
+		draw(fdf, fdf->map);
+	}
 	if (mlx_is_key_down(mlx, MLX_KEY_LEFT) || (mlx_is_key_down(mlx, MLX_KEY_A)))
-		img->instances[0].x -= 5;
+	{
+		fdf->map->x_start -= 50;
+		draw(fdf, fdf->map);
+	}
 	if (mlx_is_key_down(mlx, MLX_KEY_RIGHT) || (mlx_is_key_down(mlx, 68)))
-		img->instances[0].x += 5;
+	{
+		fdf->map->x_start += 50;
+		draw(fdf, fdf->map);
+	}
 }
 
 int32_t	main(int argc, char *argv[])
 {
 	t_fdf		*fdf;
 	mlx_image_t	*img;
-	t_map		*map;
 	int			fd;
 
 	errno = 0;
 	if (argc == 2)
 	{
+		fdf = fdf_init(WIDTH, HEIGHT, "FdF");
 		fd = open(argv[1], O_RDONLY);
 		if (fd == -1)
 			stop(ERR_FD);
-		map = parse(fd);
+		printf("Before parsing.\n");
+		fdf->map = parse(fd);
+		printf("After parsing.\n");
+		printf("x_start: %f\ny_stat:  %f\nspacing: %f\ncols:    %d\nrows:    %d\n", fdf->map->x_start, fdf->map->y_start, fdf->map->spacing, fdf->map->cols, fdf->map->rows);
 		close(fd);
-		fdf = fdf_init(WIDTH, HEIGHT, "FdF");
-		if (!fdf || !map)
+		if (!fdf || !fdf->map)
 			stop(ERR_INIT);
 		img = fdf->img;
 		ft_memset(img->pixels, 0, img->width * img->height * sizeof(int));
-		draw(fdf, map);
+		draw(fdf, fdf->map);
 		mlx_image_to_window(fdf->mlx, fdf->img, 0, 0);
 		mlx_loop_hook(fdf->mlx, &hook, fdf);
 		mlx_loop(fdf->mlx);

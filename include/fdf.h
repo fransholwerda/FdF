@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 15:30:36 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/25 18:04:02 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/08/31 17:47:18 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 # include <MLX42.h>
 
 # ifndef WIDTH
-#  define WIDTH 1280
+#  define WIDTH 5000
 # endif
 # ifndef HEIGHT
-#  define HEIGHT 720
+#  define HEIGHT 3000
 # endif
 
 typedef struct s_point
@@ -46,6 +46,8 @@ typedef struct s_map
 	float	spacing;
 	int		cols;
 	int		rows;
+	float	highest;
+	float	lowest;
 	t_point	*point;
 }			t_map;
 
@@ -53,6 +55,7 @@ typedef struct s_fdf
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
+	t_map		*map;
 	char		*addr;
 	int			bits_per_pixel;
 	int			line_length;
@@ -68,6 +71,13 @@ typedef struct s_fdf
  * @returns Ptr to the fdf handle or null on failure.
  */
 t_fdf	*fdf_init(int32_t width, int32_t height, char *name);
+
+/**
+ * Frees the content of the array and the array itself.
+ * 
+ * @param[in] array The array to be freed.
+ */
+void	free_array(char **array);
 
 /**
  * Tests whether the input is blank space.
