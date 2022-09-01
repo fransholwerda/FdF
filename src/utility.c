@@ -6,12 +6,12 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/21 15:10:04 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/31 15:09:34 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/01 16:18:03 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <MLX42.h>
-#include "../include/fdf.h"
+#include <fdf.h>
 #include <stdlib.h>
 
 t_fdf	*fdf_init(int32_t width, int32_t height, char *name)

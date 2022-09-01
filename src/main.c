@@ -6,17 +6,19 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/19 12:12:15 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/31 17:48:01 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/01 16:54:51 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <MLX42.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <libft.h>
 #include <fdf.h>
 #include <err_msg.h>
+
+
+#include <stdio.h>
 
 void	stop(char *s)
 {
@@ -58,6 +60,16 @@ void	hook(void *param)
 		fdf->map->x_start += 50;
 		draw(fdf, fdf->map);
 	}
+	if (mlx_is_key_down(mlx, MLX_KEY_KP_ADD))
+	{
+		fdf->map->spacing++;
+		draw(fdf, fdf->map);
+	}
+	if (mlx_is_key_down(mlx, MLX_KEY_KP_SUBTRACT))
+	{
+		fdf->map->spacing--;
+		draw(fdf, fdf->map);
+	}
 }
 
 int32_t	main(int argc, char *argv[])
@@ -76,7 +88,8 @@ int32_t	main(int argc, char *argv[])
 		printf("Before parsing.\n");
 		fdf->map = parse(fd);
 		printf("After parsing.\n");
-		printf("x_start: %f\ny_stat:  %f\nspacing: %f\ncols:    %d\nrows:    %d\n", fdf->map->x_start, fdf->map->y_start, fdf->map->spacing, fdf->map->cols, fdf->map->rows);
+		printf("x_start: %f\ny_start: %f\nspacing: %f\ncols:    %d\nrows:    %d\n", fdf->map->x_start, fdf->map->y_start, fdf->map->spacing, fdf->map->cols, fdf->map->rows);
+		printf("highest: %f\nlowest:  %f\n", fdf->map->highest, fdf->map->lowest);
 		close(fd);
 		if (!fdf || !fdf->map)
 			stop(ERR_INIT);

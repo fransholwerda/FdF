@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/07 14:04:10 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/31 16:24:29 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/01 17:01:41 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,20 @@ void	drawline(mlx_image_t *img, int x0, int y0, int x1, int y1, unsigned int rgb
 	int sx = x0 < x1 ? 1 : -1;
 	int dy = -abs (y1 - y0);
 	int sy = y0 < y1 ? 1 : -1;
-	int err = dx + dy, e2;
+	int err = dx + dy;
+	int e2;
+
 	static int count = 0;
 
 	count++;
-	printf("#%d -> from %d,%d to %d,%d\n", count, x0, y0, x1, y1);
+	//printf("#%d -> from %d,%d to %d,%d\n", count, x0, y0, x1, y1);
 	while (1)
 	{
 		if (x0 >= 0 && x0 < WIDTH && y0 >= 0 && y0 < HEIGHT)
+		{
+			//printf("%d,%d\n",x0,y0); //bla
 			mlx_put_pixel(img, x0, y0, rgb);
+		}
 		if ((x0 == x1) && (y0 == y1))
 			break ;
 		e2 = 2 * err;
@@ -58,7 +63,13 @@ t_point	*next_row_pt(t_point *pt, int cols)
 	i = 0;
 	while (i < cols)
 	{
-		pt = pt->next;
+		if (pt->next)
+			pt = pt->next;
+		else
+		{
+			printf("WTF?!\n"); //???
+			return (pt); //remove
+		}
 		i++;
 	}
 	return (pt);
@@ -81,12 +92,10 @@ void	draw(t_fdf *fdf, t_map *map)
 	int		y0;
 	int		y1;
 	t_point	*pt;
-	t_point	*pt2;
 
 	draw_reset(fdf);
 	i = 0;
 	pt = map->point;
-	pt2 = next_row_pt(pt, map->cols);
 	while (i < map->rows)
 	{
 		j = 0;
@@ -96,16 +105,14 @@ void	draw(t_fdf *fdf, t_map *map)
 			y0 = round((map->y_start + i * map->spacing + j * map->spacing) - pt->height);
 			x1 = x0 + map->spacing;
 			y1 = round(y0 + map->spacing + pt->height);
-			if (j + 1 < map->cols)
+			if (j + 1 < map->cols && pt->next)
 				drawline(fdf->img, x0, y0, x1, round(y1 - pt->next->height), pt->color);
-			if (i + 1 < map->rows)
+			if (i < (map->rows - 1))
 				drawline(fdf->img, x0, y0, x1 - 2 * map->spacing, round(y1 - next_row_pt(pt, map->cols)->height), pt->color);
-			if (!(i + 1 == map->rows && j + 1 == map->cols))
+			if (pt->next)
 				pt = pt->next;
 			j++;
 		}
-		if (i + 1 < map->rows)
-			pt2 = next_row_pt(pt, map->cols);
 		i++;
 	}
 }

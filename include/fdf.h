@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 15:30:36 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/31 17:47:18 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/01 15:57:49 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 # include <MLX42.h>
 
 # ifndef WIDTH
-#  define WIDTH 5000
+#  define WIDTH 2240
 # endif
 # ifndef HEIGHT
-#  define HEIGHT 3000
+#  define HEIGHT 1260
 # endif
 
 typedef struct s_point

@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 16:12:16 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/31 17:56:37 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/01 17:33:06 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 #include <get_next_line.h>
 #include <libft.h>
 
-
 #include <stdio.h>
-
 static unsigned int	get_color(char *str)
 {
 	size_t	i;
@@ -60,10 +58,12 @@ static void	get_points(int fd, t_map *map)
 	char	*line;
 	char	**array;
 	t_point	*new_point;
+	int		rv;
 
 	line = NULL;
 	new_point = NULL;
-	while (get_next_line(fd, &line))
+	rv = get_next_line(fd, &line);
+	while (rv == 1)
 	{
 		array = ft_split(line, ' ');
 		map->rows++;
@@ -71,7 +71,10 @@ static void	get_points(int fd, t_map *map)
 		free(line);
 		free_array(array);
 		line = NULL;
+		rv = get_next_line(fd, &line);
 	}
+	if (rv == -1)
+		stop(ERR_FD);
 	if (line)
 		free(line);
 }
@@ -85,12 +88,12 @@ t_map	*parse(int fd)
 	map = map_new();
 	get_points(fd, map);
 	x_spacing = WIDTH / (float)((map->cols + map->rows));
-	y_spacing = (HEIGHT - map->highest + map->lowest) / (float)((map->rows + map->cols));
+	y_spacing = (HEIGHT - map->highest + map->lowest) / (float)((map->rows + map->cols + 2));
 	//printf("x_spacing: %f\ny_spacing: %f\n", x_spacing, y_spacing);
 	if (x_spacing > y_spacing)
-		map->spacing = y_spacing;
+		map->spacing = floor(y_spacing);
 	else
-		map->spacing = x_spacing;
+		map->spacing = floor(x_spacing);
 	map->x_start = round(map->spacing * map->rows);
 	map->y_start = round(map->spacing + map->highest);
 	return (map);
