@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/23 17:48:30 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/31 13:09:47 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/05 14:41:27 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,37 @@ t_map	*map_new(void)
 	map->highest = -2147483648;
 	map->lowest = 2147483647;
 	return (map);
+}
+
+void	translate(t_fdf *fdf, char xy, int amount)
+{
+	if (xy == 'x')
+	{
+		fdf->map->x_start += amount;
+		draw(fdf, fdf->map);
+	}
+	else if (xy == 'y')
+	{
+		fdf->map->y_start += amount;
+		draw(fdf, fdf->map);
+	}
+}
+
+void	zoom(t_fdf *fdf, int amount)
+{
+	fdf->map->spacing += amount;
+	draw(fdf, fdf->map);
+}
+
+void	change_height(t_fdf *fdf, float factor)
+{
+	t_point	*pt;
+
+	pt = fdf->map->point;
+	while (pt)
+	{
+		pt->height = pt->height * factor;
+		pt = pt->next;
+	}
+	draw(fdf, fdf->map);
 }

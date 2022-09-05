@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/23 17:48:33 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/08/25 16:57:37 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/05 15:55:30 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,16 @@ t_point	*pt_new(float height, unsigned int color)
 	pt->height = height;
 	pt->color = color;
 	pt->next = NULL;
+	pt->last = pt;
 	return (pt);
 }
 
-t_point	*pt_add_back(t_point *dst, t_point *new)
+void	pt_add_back(t_point *dst, t_point *new)
 {
-	t_point	*first;
-
 	if (!dst || !new)
 		exit(EXIT_FAILURE);
-	first = dst;
-	while (dst->next)
-		dst = dst->next;
-	dst->next = new;
-	return (first);
+	dst->last->next = new;
+	dst->last = new;
 }
 
 void	pt_clear(t_point *pt)
@@ -49,4 +45,17 @@ void	pt_clear(t_point *pt)
 		pt = pt->next;
 		free(temp);
 	}
+}
+
+t_point	*next_row_pt(t_point *pt, int cols)
+{
+	int		i;
+
+	i = 0;
+	while (i < cols)
+	{
+		pt = pt->next;
+		i++;
+	}
+	return (pt);
 }

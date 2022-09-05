@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 16:12:16 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/01 17:33:06 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/05 15:45:14 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <get_next_line.h>
 #include <libft.h>
 
-#include <stdio.h>
 static unsigned int	get_color(char *str)
 {
 	size_t	i;
@@ -24,7 +23,7 @@ static unsigned int	get_color(char *str)
 	while (i < ft_strlen(str))
 	{
 		if (str[i] == ',')
-			return (0x00FFFFFF); //FIX THIS WITH COLOR
+			return (0x00FFFFFF);
 		i++;
 	}
 	return (0x00FFFFFF);
@@ -39,17 +38,20 @@ static void	fill_points(char **array, t_map *map)
 	map->cols = 0;
 	while (array[i])
 	{
-		height = ft_atoi(array[i]);
-		if (height > map->highest)
-			map->highest = height;
-		if (height < map->lowest)
-			map->lowest = height;
-		if (!map->point)
-			map->point = pt_new(height, get_color(array[i]));
-		else
-			pt_add_back(map->point, pt_new(height, get_color(array[i])));
+		if (array[i][0] != '\n')
+		{
+			height = ft_atoi(array[i]);
+			if (height > map->highest)
+				map->highest = height;
+			if (height < map->lowest)
+				map->lowest = height;
+			if (!map->point)
+				map->point = pt_new(height, get_color(array[i]));
+			else
+				pt_add_back(map->point, pt_new(height, get_color(array[i])));
+			map->cols++;
+		}
 		i++;
-		map->cols++;
 	}
 }
 
@@ -88,8 +90,8 @@ t_map	*parse(int fd)
 	map = map_new();
 	get_points(fd, map);
 	x_spacing = WIDTH / (float)((map->cols + map->rows));
-	y_spacing = (HEIGHT - map->highest + map->lowest) / (float)((map->rows + map->cols + 2));
-	//printf("x_spacing: %f\ny_spacing: %f\n", x_spacing, y_spacing);
+	y_spacing = (HEIGHT - map->highest + map->lowest)
+		/ (float)((map->rows + map->cols + 2));
 	if (x_spacing > y_spacing)
 		map->spacing = floor(y_spacing);
 	else

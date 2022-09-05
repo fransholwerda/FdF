@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   err_msg.h                                          :+:    :+:            */
+/*   coord_utility.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/02/25 16:10:57 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/05 17:17:31 by fholwerd      ########   odam.nl         */
+/*   Created: 2022/09/03 17:03:58 by fholwerd      #+#    #+#                 */
+/*   Updated: 2022/09/05 12:25:32 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERR_MSG_H
-# define ERR_MSG_H
+#include <fdf.h>
+#include <stdlib.h>
+#include <err.h>
+#include <err_msg.h>
 
-# define ERR_FILE			"Wrong usage, use ./fdf MAPFILE"
-# define ERR_FILE_EXTENSION	"Use .fdf file extension"
-# define ERR_FD				"Opening file failed."
-# define ERR_INIT			"Initialization failed."
-# define ERR_MAP_INIT		"Map initialization failed."
-# define ERR_COORD_INIT		"Coord initialization failed."
+t_coord	*init_coord(void)
+{
+	t_coord	*c0;
 
-#endif
+	c0 = malloc(sizeof(t_coord));
+	if (!c0)
+		stop(ERR_COORD_INIT);
+	return (c0);
+}

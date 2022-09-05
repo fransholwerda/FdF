@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/07 14:04:10 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/01 17:01:41 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/05 17:14:01 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,65 +17,32 @@
 #include <math.h>
 #include <libft.h>
 
-
-#include <stdio.h>
-
-void	drawline(mlx_image_t *img, int x0, int y0, int x1, int y1, unsigned int rgb)
+static void	drawline(mlx_image_t *img, t_coord *c0, t_coord *c1, u_int32_t rgb)
 {
-	int dx = abs (x1 - x0);
-	int sx = x0 < x1 ? 1 : -1;
-	int dy = -abs (y1 - y0);
-	int sy = y0 < y1 ? 1 : -1;
-	int err = dx + dy;
-	int e2;
+	t_linehelper	lh;
 
-	static int count = 0;
-
-	count++;
-	//printf("#%d -> from %d,%d to %d,%d\n", count, x0, y0, x1, y1);
+	lh_init(&lh, c0, c1);
 	while (1)
 	{
-		if (x0 >= 0 && x0 < WIDTH && y0 >= 0 && y0 < HEIGHT)
-		{
-			//printf("%d,%d\n",x0,y0); //bla
-			mlx_put_pixel(img, x0, y0, rgb);
-		}
-		if ((x0 == x1) && (y0 == y1))
+		if (lh.x >= 0 && lh.x < WIDTH && lh.y >= 0 && lh.y < HEIGHT)
+			mlx_put_pixel(img, lh.x, lh.y, rgb);
+		if ((lh.x == c1->x) && (lh.y == c1->y))
 			break ;
-		e2 = 2 * err;
-		if (e2 >= dy)
+		lh.e2 = 2 * lh.err;
+		if (lh.e2 >= lh.dy)
 		{
-			err += dy;
-			x0 += sx;
+			lh.err += lh.dy;
+			lh.x += lh.sx;
 		}
-		if (e2 <= dx)
+		if (lh.e2 <= lh.dx)
 		{
-			err += dx;
-			y0 += sy;
+			lh.err += lh.dx;
+			lh.y += lh.sy;
 		}
 	}
 }
 
-t_point	*next_row_pt(t_point *pt, int cols)
-{
-	int		i;
-
-	i = 0;
-	while (i < cols)
-	{
-		if (pt->next)
-			pt = pt->next;
-		else
-		{
-			printf("WTF?!\n"); //???
-			return (pt); //remove
-		}
-		i++;
-	}
-	return (pt);
-}
-
-void	draw_reset(t_fdf *fdf)
+static void	draw_reset(t_fdf *fdf)
 {
 	size_t	n;
 
@@ -83,36 +50,53 @@ void	draw_reset(t_fdf *fdf)
 	ft_memset(fdf->img->pixels, 0, n);
 }
 
+static void	set_coords(t_fdf *fdf, t_point *pt, int x, int y)
+{
+	t_coord	*c0;
+	t_coord	*c1;
+	int		tmp_y;
+
+	c0 = init_coord();
+	c1 = init_coord();
+	c0->x = round(fdf->map->x_start + x * fdf->map->spacing - y
+			* fdf->map->spacing);
+	c0->y = round((fdf->map->y_start + y * fdf->map->spacing + x
+				* fdf->map->spacing) - pt->height);
+	c1->x = c0->x + fdf->map->spacing;
+	c1->y = round(c0->y + fdf->map->spacing + pt->height);
+	tmp_y = c1->y;
+	if (x + 1 < fdf->map->cols && pt->next)
+	{
+		c1->y = round(c1->y - pt->next->height);
+		drawline(fdf->img, c0, c1, pt->color);
+	}
+	if (y < (fdf->map->rows - 1))
+	{
+		c1->x = c1->x - 2 * fdf->map->spacing;
+		c1->y = round(tmp_y - next_row_pt(pt, fdf->map->cols)->height);
+		drawline(fdf->img, c0, c1, pt->color);
+	}
+}
+
 void	draw(t_fdf *fdf, t_map *map)
 {
-	int		i;
-	int		j;
-	int		x0;
-	int		x1;
-	int		y0;
-	int		y1;
+	int		x;
+	int		y;
 	t_point	*pt;
 
 	draw_reset(fdf);
-	i = 0;
+	y = 0;
 	pt = map->point;
-	while (i < map->rows)
+	while (y < map->rows)
 	{
-		j = 0;
-		while (j < map->cols)
+		x = 0;
+		while (x < map->cols)
 		{
-			x0 = round(map->x_start + j * map->spacing - i * map->spacing);
-			y0 = round((map->y_start + i * map->spacing + j * map->spacing) - pt->height);
-			x1 = x0 + map->spacing;
-			y1 = round(y0 + map->spacing + pt->height);
-			if (j + 1 < map->cols && pt->next)
-				drawline(fdf->img, x0, y0, x1, round(y1 - pt->next->height), pt->color);
-			if (i < (map->rows - 1))
-				drawline(fdf->img, x0, y0, x1 - 2 * map->spacing, round(y1 - next_row_pt(pt, map->cols)->height), pt->color);
+			set_coords(fdf, pt, x, y);
 			if (pt->next)
 				pt = pt->next;
-			j++;
+			x++;
 		}
-		i++;
+		y++;
 	}
 }

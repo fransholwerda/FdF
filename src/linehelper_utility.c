@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   err_msg.h                                          :+:    :+:            */
+/*   linehelper_utility.c                               :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2022/02/25 16:10:57 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/05 17:17:31 by fholwerd      ########   odam.nl         */
+/*   Created: 2022/09/05 12:57:42 by fholwerd      #+#    #+#                 */
+/*   Updated: 2022/09/05 14:12:47 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERR_MSG_H
-# define ERR_MSG_H
+#include <fdf.h>
+#include <stdlib.h>
 
-# define ERR_FILE			"Wrong usage, use ./fdf MAPFILE"
-# define ERR_FILE_EXTENSION	"Use .fdf file extension"
-# define ERR_FD				"Opening file failed."
-# define ERR_INIT			"Initialization failed."
-# define ERR_MAP_INIT		"Map initialization failed."
-# define ERR_COORD_INIT		"Coord initialization failed."
-
-#endif
+void	lh_init(t_linehelper *lh, t_coord *c0, t_coord *c1)
+{
+	lh->dx = abs(c1->x - c0->x);
+	if (c0->x < c1->x)
+		lh->sx = 1;
+	else
+		lh->sx = -1;
+	lh->dy = -abs(c1->y - c0->y);
+	if (c0->y < c1->y)
+		lh->sy = 1;
+	else
+		lh->sy = -1;
+	lh->err = lh->dx + lh->dy;
+	lh->x = c0->x;
+	lh->y = c0->y;
+}
