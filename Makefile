@@ -6,7 +6,7 @@
 #    By: fholwerd <fholwerd@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/03/01 12:50:34 by fholwerd      #+#    #+#                  #
-#    Updated: 2022/08/25 15:18:18 by fholwerd      ########   odam.nl          #
+#    Updated: 2022/09/07 14:51:13 by fholwerd      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,7 @@ B_OBJ	= $(B_SRC:.c=.o)
 INCLUDE	= -I$(ROOT)MLX42/include/MLX42 \
 			-I$(ROOT)include \
 			-I$(ROOT)libft \
-			-I$(ROOT)gnl \
-			-I$(ROOT)ft_printf/incs
+			-I$(ROOT)gnl
 FRWRK	=
 LIB		= $(ROOT)MLX42/libmlx42.a \
 			$(ROOT)libft/libft.a
@@ -40,13 +39,11 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	make libs -C $(ROOT)
-#	$(CC) $(OBJS) $(LIB) -framework OpenGL -framework AppKit -o $(NAME)
 	$(CC) $(OBJS) $(LIB) $(INCLUDE) -lglfw -L "/Users/fholwerd/.brew/opt/glfw/lib/" -o $(NAME)
 
 libs:
 	make -C $(ROOT)MLX42
 	make -C $(ROOT)libft
-	make -C $(ROOT)ft_printf
 
 bonus:
 	$(MAKE) WITH_BONUS=1 all
