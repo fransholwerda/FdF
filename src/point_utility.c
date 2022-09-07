@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/23 17:48:33 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/05 15:55:30 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/07 13:39:35 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ t_point	*next_row_pt(t_point *pt, int cols)
 	i = 0;
 	while (i < cols)
 	{
-		pt = pt->next;
+		if (pt->next)
+			pt = pt->next;
 		i++;
 	}
 	return (pt);

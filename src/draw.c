@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/07 14:04:10 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/05 17:14:01 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/07 13:14:46 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,20 @@ static void	drawline(mlx_image_t *img, t_coord *c0, t_coord *c1, u_int32_t rgb)
 
 static void	draw_reset(t_fdf *fdf)
 {
-	size_t	n;
+	u_int32_t	x;
+	u_int32_t	y;
 
-	n = fdf->img->width * fdf->img->height * sizeof(int);
-	ft_memset(fdf->img->pixels, 0, n);
+	x = 0;
+	while (x < WIDTH)
+	{
+		y = 0;
+		while (y < HEIGHT)
+		{
+			mlx_put_pixel(fdf->img, x, y, fdf->rgb);
+			y++;
+		}
+		x++;
+	}
 }
 
 static void	set_coords(t_fdf *fdf, t_point *pt, int x, int y)

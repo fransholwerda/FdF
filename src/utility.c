@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/21 15:10:04 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/05 17:32:51 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/07 13:16:59 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <fdf.h>
 #include <libft.h>
 #include <stdlib.h>
+#include <colours.h>
 
 t_fdf	*fdf_init(int32_t width, int32_t height, char *name)
 {
@@ -29,6 +30,8 @@ t_fdf	*fdf_init(int32_t width, int32_t height, char *name)
 	if (!fdf->img)
 		return (NULL);
 	fdf->map = NULL;
+	fdf->rgb = SILVER;
+	fdf->line_rgb = BLACK;
 	return (fdf);
 }
 

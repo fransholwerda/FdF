@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 15:30:36 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/05 17:33:38 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/07 14:24:57 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ typedef struct s_fdf
 	int			bits_per_pixel;
 	int			line_length;
 	int			endian;
+	u_int32_t	rgb;
+	u_int32_t	line_rgb;
 }				t_fdf;
 
 /**
@@ -85,7 +87,7 @@ typedef struct s_fdf
  */
 t_fdf	*fdf_init(int32_t width, int32_t height, char *name);
 
-int	check_extension(char *file, char *extension);
+int		check_extension(char *file, char *extension);
 
 /**
  * Frees the content of the array and the array itself.
@@ -105,10 +107,11 @@ int		ft_isblank(char c);
 /**
  * Will parse the given file and store information in a t_map object
  * 
+ * @param[in] fdf The t_fdf struct.
  * @param[in] file The file provided by the user.
  * @returns Ptr to the map handle or null on failure.
  */
-t_map	*parse(int fd);
+t_map	*parse(t_fdf *fdf, int fd);
 
 /**
  * Functions for adding t_point objects and clearing them
@@ -124,7 +127,8 @@ t_point	*next_row_pt(t_point *pt, int cols);
 t_map	*map_new(void);
 void	translate(t_fdf *fdf, char xy, int amount);
 void	zoom(t_fdf *fdf, int amount);
-void	change_height(t_fdf *fdf, float factor);
+void	change_height(t_fdf *fdf, float factor, int up);
+void	change_colour(t_fdf *fdf, u_int32_t rgb);
 
 /**
  * Prints out errno error if there is one, otherwise the given string.

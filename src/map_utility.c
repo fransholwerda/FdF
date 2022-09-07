@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/08/23 17:48:30 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/05 14:41:27 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/07 13:30:42 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,24 @@ void	zoom(t_fdf *fdf, int amount)
 	draw(fdf, fdf->map);
 }
 
-void	change_height(t_fdf *fdf, float factor)
+void	change_height(t_fdf *fdf, float factor, int up)
 {
 	t_point	*pt;
 
 	pt = fdf->map->point;
 	while (pt)
 	{
-		pt->height = pt->height * factor;
+		if (up == 1)
+			pt->height = pt->height * factor;
+		else
+			pt->height = pt->height / factor;
 		pt = pt->next;
 	}
+	draw(fdf, fdf->map);
+}
+
+void	change_colour(t_fdf *fdf, u_int32_t rgb)
+{
+	fdf->rgb = rgb;
 	draw(fdf, fdf->map);
 }

@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/19 12:12:15 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/05 17:34:03 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/07 13:31:03 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <fdf.h>
 #include <err_msg.h>
 #include <stdio.h>
+#include <colours.h>
 
 void	stop(char *s)
 {
@@ -25,6 +26,30 @@ void	stop(char *s)
 	else
 		perror(s);
 	exit(EXIT_FAILURE);
+}
+
+static void	colour_hook(t_fdf *fdf)
+{
+	if (mlx_is_key_down(fdf->mlx, MLX_KEY_0))
+		change_colour(fdf, BLACK);
+	if (mlx_is_key_down(fdf->mlx, MLX_KEY_1))
+		change_colour(fdf, WHITE);
+	if (mlx_is_key_down(fdf->mlx, MLX_KEY_2))
+		change_colour(fdf, RED);
+	if (mlx_is_key_down(fdf->mlx, MLX_KEY_3))
+		change_colour(fdf, LIME);
+	if (mlx_is_key_down(fdf->mlx, MLX_KEY_4))
+		change_colour(fdf, BLUE);
+	if (mlx_is_key_down(fdf->mlx, MLX_KEY_5))
+		change_colour(fdf, YELLOW);
+	if (mlx_is_key_down(fdf->mlx, MLX_KEY_6))
+		change_colour(fdf, CYAN);
+	if (mlx_is_key_down(fdf->mlx, MLX_KEY_7))
+		change_colour(fdf, MAGENTA);
+	if (mlx_is_key_down(fdf->mlx, MLX_KEY_8))
+		change_colour(fdf, SILVER);
+	if (mlx_is_key_down(fdf->mlx, MLX_KEY_9))
+		change_colour(fdf, GREEN);
 }
 
 static void	hook(void *param)
@@ -47,9 +72,10 @@ static void	hook(void *param)
 	if (mlx_is_key_down(fdf->mlx, MLX_KEY_KP_SUBTRACT))
 		zoom(fdf, -1);
 	if (mlx_is_key_down(fdf->mlx, MLX_KEY_PAGE_UP))
-		change_height(fdf, 1.1);
+		change_height(fdf, 1.1, 1);
 	if (mlx_is_key_down(fdf->mlx, MLX_KEY_PAGE_DOWN))
-		change_height(fdf, 0.9);
+		change_height(fdf, 1.1, 0);
+	colour_hook(fdf);
 }
 
 static void	fdf(char *file_name)
@@ -62,12 +88,11 @@ static void	fdf(char *file_name)
 	fd = open(file_name, O_RDONLY);
 	if (fd == -1)
 		stop(ERR_FD);
-	fdf->map = parse(fd);
+	fdf->map = parse(fdf, fd);
 	close(fd);
 	if (!fdf || !fdf->map)
 		stop(ERR_INIT);
 	img = fdf->img;
-	ft_memset(img->pixels, 0, img->width * img->height * sizeof(int));
 	draw(fdf, fdf->map);
 	mlx_image_to_window(fdf->mlx, fdf->img, 0, 0);
 	mlx_loop_hook(fdf->mlx, &hook, fdf);

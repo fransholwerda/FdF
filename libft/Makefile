@@ -6,7 +6,7 @@
 #    By: fholwerd <fholwerd@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/11/05 12:14:31 by fholwerd      #+#    #+#                  #
-#    Updated: 2021/09/28 14:38:01 by fholwerd      ########   odam.nl          #
+#    Updated: 2022/09/07 11:57:15 by fholwerd      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRCS = ft_memset.c \
 	ft_strnstr.c \
 	ft_strncmp.c \
 	ft_atoi.c \
+	ft_atoi_base.c \
 	ft_isalpha.c \
 	ft_isdigit.c \
 	ft_isalnum.c \

@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 16:12:16 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/05 15:45:14 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/07 13:25:08 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <get_next_line.h>
 #include <libft.h>
 
-static unsigned int	get_color(char *str)
+static unsigned int	get_color(t_fdf *fdf, char *str)
 {
 	size_t	i;
 
@@ -23,13 +23,13 @@ static unsigned int	get_color(char *str)
 	while (i < ft_strlen(str))
 	{
 		if (str[i] == ',')
-			return (0x00FFFFFF);
+			return (ft_atoi_base(&str[i + 3], 16) * 256 + 0xFF);
 		i++;
 	}
-	return (0x00FFFFFF);
+	return (fdf->line_rgb);
 }
 
-static void	fill_points(char **array, t_map *map)
+static void	fill_points(t_fdf *fdf, char **array, t_map *map)
 {
 	unsigned int	i;
 	float			height;
@@ -46,16 +46,17 @@ static void	fill_points(char **array, t_map *map)
 			if (height < map->lowest)
 				map->lowest = height;
 			if (!map->point)
-				map->point = pt_new(height, get_color(array[i]));
+				map->point = pt_new(height, get_color(fdf, array[i]));
 			else
-				pt_add_back(map->point, pt_new(height, get_color(array[i])));
+				pt_add_back(map->point, pt_new(height,
+						get_color(fdf, array[i])));
 			map->cols++;
 		}
 		i++;
 	}
 }
 
-static void	get_points(int fd, t_map *map)
+static void	get_points(t_fdf *fdf, int fd, t_map *map)
 {
 	char	*line;
 	char	**array;
@@ -69,7 +70,7 @@ static void	get_points(int fd, t_map *map)
 	{
 		array = ft_split(line, ' ');
 		map->rows++;
-		fill_points(array, map);
+		fill_points(fdf, array, map);
 		free(line);
 		free_array(array);
 		line = NULL;
@@ -81,14 +82,14 @@ static void	get_points(int fd, t_map *map)
 		free(line);
 }
 
-t_map	*parse(int fd)
+t_map	*parse(t_fdf *fdf, int fd)
 {
 	t_map	*map;
 	float	x_spacing;
 	float	y_spacing;
 
 	map = map_new();
-	get_points(fd, map);
+	get_points(fdf, fd, map);
 	x_spacing = WIDTH / (float)((map->cols + map->rows));
 	y_spacing = (HEIGHT - map->highest + map->lowest)
 		/ (float)((map->rows + map->cols + 2));
