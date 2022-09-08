@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/07 14:04:10 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/07 13:14:46 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/08 12:41:09 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,29 +62,27 @@ static void	draw_reset(t_fdf *fdf)
 
 static void	set_coords(t_fdf *fdf, t_point *pt, int x, int y)
 {
-	t_coord	*c0;
-	t_coord	*c1;
+	t_coord	c0;
+	t_coord	c1;
 	int		tmp_y;
 
-	c0 = init_coord();
-	c1 = init_coord();
-	c0->x = round(fdf->map->x_start + x * fdf->map->spacing - y
+	c0.x = round(fdf->map->x_start + x * fdf->map->spacing - y
 			* fdf->map->spacing);
-	c0->y = round((fdf->map->y_start + y * fdf->map->spacing + x
+	c0.y = round((fdf->map->y_start + y * fdf->map->spacing + x
 				* fdf->map->spacing) - pt->height);
-	c1->x = c0->x + fdf->map->spacing;
-	c1->y = round(c0->y + fdf->map->spacing + pt->height);
-	tmp_y = c1->y;
+	c1.x = c0.x + fdf->map->spacing;
+	c1.y = round(c0.y + fdf->map->spacing + pt->height);
+	tmp_y = c1.y;
 	if (x + 1 < fdf->map->cols && pt->next)
 	{
-		c1->y = round(c1->y - pt->next->height);
-		drawline(fdf->img, c0, c1, pt->color);
+		c1.y = round(c1.y - pt->next->height);
+		drawline(fdf->img, &c0, &c1, pt->color);
 	}
 	if (y < (fdf->map->rows - 1))
 	{
-		c1->x = c1->x - 2 * fdf->map->spacing;
-		c1->y = round(tmp_y - next_row_pt(pt, fdf->map->cols)->height);
-		drawline(fdf->img, c0, c1, pt->color);
+		c1.x = c1.x - 2 * fdf->map->spacing;
+		c1.y = round(tmp_y - next_row_pt(pt, fdf->map->cols)->height);
+		drawline(fdf->img, &c0, &c1, pt->color);
 	}
 }
 

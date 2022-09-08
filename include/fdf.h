@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/02/25 15:30:36 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/07 14:24:57 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/08 12:47:44 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ void	change_colour(t_fdf *fdf, u_int32_t rgb);
 void	stop(char *s);
 
 void	lh_init(t_linehelper *lh, t_coord *c0, t_coord *c1);
-t_coord	*init_coord(void);
 
 void	draw(t_fdf *fdf, t_map *map);
 
