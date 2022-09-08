@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/19 12:12:15 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/07 13:31:03 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/08 14:13:15 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,10 @@ static void	hook(void *param)
 
 	fdf = param;
 	if (mlx_is_key_down(fdf->mlx, MLX_KEY_ESCAPE))
+	{
 		mlx_close_window(fdf->mlx);
+		exit(EXIT_SUCCESS);
+	}
 	if (mlx_is_key_down(fdf->mlx, MLX_KEY_UP))
 		translate(fdf, 'y', -50);
 	if (mlx_is_key_down(fdf->mlx, MLX_KEY_DOWN))
