@@ -6,14 +6,21 @@
 #    By: fholwerd <fholwerd@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/03/01 12:50:34 by fholwerd      #+#    #+#                  #
-#    Updated: 2022/09/08 12:15:32 by fholwerd      ########   odam.nl          #
+#    Updated: 2022/10/15 15:34:52 by fholwerd      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 ROOT	= $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 NAME	= fdf
-SRC		=	$(wildcard $(ROOT)src/*.c) \
-			$(wildcard $(ROOT)gnl/*.c)
+SRC		=	$(ROOT)src/draw.c \
+			$(ROOT)src/linehelper_utility.c \
+			$(ROOT)src/main.c \
+			$(ROOT)src/map_utility.c \
+			$(ROOT)src/parse.c \
+			$(ROOT)src/point_utility.c \
+			$(ROOT)src/utility.c \
+			$(ROOT)gnl/get_next_line_utils.c \
+			$(ROOT)gnl/get_next_line.c
 OBJ		= $(SRC:.c=.o)
 INCLUDE	= -I$(ROOT)MLX42/include/MLX42 \
 			-I$(ROOT)include \

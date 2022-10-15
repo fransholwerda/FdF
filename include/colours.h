@@ -6,14 +6,14 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/09/07 12:21:07 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/09/07 13:27:09 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/09/21 13:51:53 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COLOURS_H
 # define COLOURS_H
 
-typedef enum colours
+typedef enum e_colours
 {
 	BLACK	= 0x000000FF,
 	WHITE	= 0xFFFFFFFF,
