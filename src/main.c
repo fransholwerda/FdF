@@ -6,7 +6,7 @@
 /*   By: fholwerd <fholwerd@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/04/19 12:12:15 by fholwerd      #+#    #+#                 */
-/*   Updated: 2022/10/15 15:40:31 by fholwerd      ########   odam.nl         */
+/*   Updated: 2022/10/31 11:26:28 by fholwerd      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ static void	fdf(char *file_name)
 	mlx_loop_hook(fdf->mlx, &hook, fdf);
 	mlx_loop(fdf->mlx);
 	mlx_terminate(fdf->mlx);
+	exit(EXIT_SUCCESS);
 }
 
 int32_t	main(int argc, char *argv[])
